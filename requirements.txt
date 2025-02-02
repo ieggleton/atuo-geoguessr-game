@@ -1,0 +1,6 @@
+requests
+selenium
+undetected-chromedriver
+seleniumbase
+prefect
+prefect_slack
