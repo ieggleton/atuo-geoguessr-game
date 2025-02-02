@@ -1,0 +1,13 @@
+services:
+  geoguessr:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      GEOGUESSR_EMAIL: unknown
+      GEOGUESSR_PWD: unknown
+    command:
+      - "python3"
+      - "as_local.py"
+    volumes:
+      - ./screenshots:/app/screeenshots

@@ -1,0 +1,14 @@
+[project]
+name = "geoguessr"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "prefect>=2.13.8",
+    "prefect-slack>=0.2.2",
+    "pyautogui>=0.9.54",
+    "requests>=2.32.3",
+    "selenium>=4.28.1",
+    "seleniumbase>=4.34.5",
+]
