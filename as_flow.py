@@ -31,7 +31,7 @@ def finish_round(session: GeoguessrSession, party_id: str, rnd: int):
 @task
 def start_game(session: GeoguessrSession, party_id: str):
     """ Start the game"""
-    session.start_game(party_id)
+    return session.start_game(party_id)
 
 
 @task
@@ -71,13 +71,13 @@ def geoguessr_game(email: str, rounds: Optional[int], round_length: Optional[int
     sleep(300)
 
     logger.info("Let's get this party started")
-    start_game()
+    game_id = start_game(party_id)
 
     for rnd in range(1, rounds):
         logger.info(f"Waiting {round_length + 15} to start next round...")
-        sleep(round_length + 15)
+        sleep(round_length + 20)
         logger.info("Start next round")
-        finish_round(party_id, rnd)
+        finish_round(game_id, rnd)
 
     logger.info("End of game")
 

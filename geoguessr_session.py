@@ -10,18 +10,13 @@ class GeoguessrSession:
     def __init__(self, token: str, build_id: str):
         self.__token = token
         self.__build_id = build_id
-
-    def __create_session(self):
-        """ Internal helper function to create a session """
-        session = Session()
-        session.cookies.set("_ncfa", self.__token, domain="www.geoguessr.com")
-        session.headers = {"Content-Type": "application/json"}
-        return session
+        self.__session = Session()
+        self.__session.cookies.set("_ncfa", self.__token, domain=".geoguessr.com")
 
     def get_party(self) -> [str, str]:
         """ Returns Party id and joining code"""
         party = \
-            self.__create_session().get(f"https://www.geoguessr.com/_next/data/{self.__build_id}/en/party.json").json()[
+            self.__session.get(f"https://www.geoguessr.com/_next/data/{self.__build_id}/en/party.json").json()[
                 "pageProps"][
                 "party"]
 
@@ -29,20 +24,20 @@ class GeoguessrSession:
 
     def apply_settings(self, rounds: Optional[int] = 5, round_length: Optional[int] = 60):
         """ Apply settings to the party"""
-        resp = self.__create_session().put("https://www.geoguessr.com/api/v4/parties/v2/game-settings",
-                                           data={"forbidMoving": False, "forbidZooming": False, "forbidRotating": False,
-                                                 "roundTime": round_length, "mapSlug": "world", "roundCount": rounds})
-        print(resp.status_code)
-        print(resp.text)
+        self.__session.put("https://www.geoguessr.com/api/v4/parties/v2/game-settings",
+                                           json={"forbidMoving": False, "forbidZooming": False, "forbidRotating": False,
+                                                 "roundTime": round_length, "mapSlug": "world", "roundCount": rounds},
+                                           headers={"Content-Type": "application/json"})
 
     def start_game(self, party_id: str):
         """ API call to start the game"""
-        resp = self.__create_session().post(f"https://game-server.geoguessr.com/api/parties/v2/{party_id}/lobby",
-                                            data={})
-        print(resp.status_code)
-        print(resp.text)
+        resp = self.__session.post(f"https://game-server.geoguessr.com/api/parties/v2/{party_id}/lobby",
+                                            json={},
+                                            headers={"Content-Type": "application/json"})
+        return resp.json()["gameLobbyId"]
 
-    def next_round(self, party_id: str, game_round: int):
+    def next_round(self, game_id: str, game_round: int):
         """ API Call to go to next round"""
-        self.__create_session().post(f"https://game-server.geoguessr.com/api/live-challenge/{party_id}/advance-round",
-                                     data={"toRoundNumber": game_round})
+        self.__session.post(f"https://game-server.geoguessr.com/api/live-challenge/{game_id}/advance-round",
+                                     json={"toRoundNumber": game_round},
+                                     headers={"Content-Type": "application/json"})

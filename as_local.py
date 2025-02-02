@@ -19,9 +19,9 @@ if __name__ == "__main__":
 
     print("Starting game...")
 
-    sesh.start_game(party_id)
+    game_id = sesh.start_game(party_id)
 
-    for game_round in range(2, 5):
+    for game_round in range(2, 5 + 1):
         sleep(75)
         print(f"Starting round {game_round}...")
-        sesh.next_round(party_id, game_round)
+        sesh.next_round(game_id, game_round)
