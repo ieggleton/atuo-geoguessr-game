@@ -1,13 +1,14 @@
 """ Handles sign in to Geoguessr, gets the ncfa token for future calls
 which will be done via API"""
 import json
+from time import sleep
 
 from selenium.webdriver.common.by import By
 from seleniumbase import Driver
-from time import sleep
 
-def signin(user:str, password: str) -> dict[str, str]:
-    """ Do signin and return ncfa token"""
+
+def signin(user: str, password: str) -> dict[str, str]:
+    """ Do sign in and return ncfa token"""
     driver = Driver(uc=True, headless=False)
     driver.uc_open_with_reconnect("https://www.geoguessr.com/signin", reconnect_time=10)
 
